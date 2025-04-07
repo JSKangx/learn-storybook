@@ -4,6 +4,17 @@ import Button from "./Button";
 const meta = {
   title: "Components/Button",
   component: Button,
+  argTypes: {
+    backgroundColor: { control: "color" },
+    textSize: {
+      control: { type: "radio" },
+      options: ["sm", "md", "lg"],
+    },
+    disabled: { control: "boolean" },
+    textColor: {
+      control: "color",
+    },
+  },
   tags: ["autodocs"],
 };
 
@@ -13,6 +24,11 @@ export default meta;
 export const Primary = {
   args: {
     label: "Primary Button",
+    backgroundColor: "#72dd96",
+    size: "md",
+    textSize: "lg",
+    disabled: false,
+    textColor: "#ffffff"
   },
 };
 
@@ -25,7 +41,7 @@ export const Danger = {
 
 export const WithClickHandler = {
   args: {
-    label: "Click Me",
+    label: "Click Me!",
     onClick: () => alert("Clicked!"),
   },
 };
