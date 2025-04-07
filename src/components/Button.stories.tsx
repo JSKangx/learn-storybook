@@ -5,7 +5,10 @@ const meta = {
   title: "Components/Button",
   component: Button,
   argTypes: {
-    backgroundColor: { control: "color" },
+    variant: {
+      control: "select",
+      options: ["primary", "secondary", "danger"],
+    },
     textSize: {
       control: { type: "radio" },
       options: ["sm", "md", "lg"],
@@ -28,7 +31,8 @@ export const Primary = {
     size: "md",
     textSize: "lg",
     disabled: false,
-    textColor: "#ffffff"
+    textColor: "#ffffff",
+    variant: "secondary",
   },
 };
 
