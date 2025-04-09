@@ -12,20 +12,6 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
   // overlay 요소를 선택
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // 모달이 열릴 때 이전에 포커스된 요소를 저장
-  const previousFocusElement = useRef<HTMLElement | null>(null);
-  useEffect(() => {
-    if (isOpen) {
-      previousFocusElement.current = document.activeElement as HTMLElement;
-    }
-
-    return () => {
-      if (isOpen && previousFocusElement.current) {
-        previousFocusElement.current.focus();
-      }
-    };
-  }, [isOpen]);
-
   // ESC 키로 닫기
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
