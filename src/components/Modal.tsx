@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import ReactFocusLock from "react-focus-lock";
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,6 +11,20 @@ interface ModalProps {
 export default function Modal({ isOpen, onClose, children }: ModalProps) {
   // overlay 요소를 선택
   const overlayRef = useRef<HTMLDivElement>(null);
+
+  // 모달이 열릴 때 이전에 포커스된 요소를 저장
+  const previousFocusElement = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (isOpen) {
+      previousFocusElement.current = document.activeElement as HTMLElement;
+    }
+
+    return () => {
+      if (isOpen && previousFocusElement.current) {
+        previousFocusElement.current.focus();
+      }
+    };
+  }, [isOpen]);
 
   // ESC 키로 닫기
   useEffect(() => {
@@ -43,16 +58,22 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
       ref={overlayRef}
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
       onClick={handleOverlayClick}
+      aria-modal="true"
+      role="dialog"
     >
-      <div className="bg-white p-6 rounded-xl w-full max-w-md relative shadow-lg">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-400 hover:text-black"
-        >
-          x
-        </button>
-        {children}
-      </div>
+      {/* FocusLock 컴포넌트로 감싸서 포커스 트랩 구현 */}
+      <ReactFocusLock returnFocus={true} lockProps={{ tabIndex: -1 }}>
+        <div className="bg-white p-6 rounded-xl w-full max-w-md relative shadow-lg">
+          <button
+            onClick={onClose}
+            className="absolute top-2 right-2 text-gray-400 hover:text-black"
+            aria-label="닫기"
+          >
+            x
+          </button>
+          {children}
+        </div>
+      </ReactFocusLock>
     </div>,
     document.body
   );
